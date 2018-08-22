@@ -1,0 +1,32 @@
+#hero {
+    background-image: url("/img/hero.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: black;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-body div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body div a {
+    font-size: 1.5rem;
+    color: #45454e;
+}
+
+.jumbotron {
+    border-radius: 0;
+}
+
+.card-body p {
+    max-width: 70%;
+}
