@@ -1,41 +1,8 @@
-/* <div class="card-body">
-                <div>
-                    <a class="card-title" href="#">Miata Stuff</a>
-                    <button href="#" class="btn btn-primary card-link">Save Article</button>
-                </div>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-</div> */
-
-const populate = (id, title, link, excerpt, saved) => {
-    var card = $("<div>").addClass("card mb-3");
-    var cardBody = $("<div>").addClass("card-body").data("id", id);
-    var head = $("<div>").addClass("mb-1");
-    head.append($("<a>").text(title).attr("href", link))
-    if (saved === true) {
-        head.append($("<button>").text("Saved!").addClass("btn btn-danger save-article"));
-    } else if (saved === false) {
-        head.append($("<button>").text("Save Article").addClass("btn btn-primary save-article"));
-    }
-    cardBody.append(head);
-    cardBody.append($("<p>").text(excerpt));
-    card.append(cardBody);
-
-    return card;
-}
-
-$.ajax({
-    type: "GET",
-    url: "/api/articles/all"
-}).then(function (data) {
-    console.log(data)
-    data.forEach(i => {
-        $("#articleContainer").append(populate(i._id, i.title, i.link, i.excerpt, i.saved))
-    });
-});
+var currentId;
 
 $(document).on("click", ".save-article", function () {
-    var id = ($(this).parent().parent().data("id"));
-    var self = $(this)
+    var id = ($(this).parent().parent().parent().data("id"));
+    var self = $(this);
     $.ajax({
         type: "PUT",
         url: `/api/articles/${id}`
@@ -50,5 +17,49 @@ $(document).on("click", ".save-article", function () {
             self.addClass("btn-danger").text("Saved!");
 
         }
+    })
+});
+
+$(document).on("click", ".view-comment", function () {
+    currentId = ($(this).parent().parent().parent().data("id"));
+    $.ajax({
+        type: "get",
+        url: `/api/notes/${currentId}`
+    }).then(function (data) {
+        $("#noteHead").text(data.title);
+        $("#noteBody").text(data.body);
+    })
+    $("#modal").modal();
+})
+
+$("#deleteModal").on("click", function() {
+    $.ajax({
+        type:"delete",
+        url:"/api/notes/",
+        data:{
+            id:currentId
+        }
+    }).then(function(data){
+        console.log("Request sent");
+        $("#noteHead").text("Comment");
+        $("#noteBody").text("");
+    });
+});
+
+$("#saveModal").on("click", function () {
+    var title = $("#title").val();
+    var body = $("#body").val();
+    console.log(currentId);
+    $.ajax({
+        type: "post",
+        url: "/api/notes/",
+        data:{
+            title:title,
+            body:body,
+            id:currentId
+        }
+    }).then(function (data) {
+        $("#noteHead").text(title);
+        $("#noteBody").text(body);
     })
 });

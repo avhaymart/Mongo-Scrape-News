@@ -18,6 +18,38 @@
     </div>
 </nav>
 
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="noteHead">Comment</p>
+                <p id="noteBody"></p>
+                <form id="commentForm">
+                    <div class="form-group">
+                        <label for="title">Add or edit comment:</label>
+                        <input autocomplete="off" type="text" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <textarea type="textarea" class="form-control" id="body" aria-describedby="emailHelp" placeholder="Enter comment"></textarea>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="saveModal" class="btn btn-primary">Save changes</button>
+                <button type="button" id="deleteModal" class="btn btn-danger">Delete comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid p-0 m-0">
     <div class="jumbotron text-light text-center mb-3" id="hero">
         <h1 class="display-4">Mongoose News Scraper
@@ -26,7 +58,31 @@
     </div>
 
     <div id="articleContainer">
-
+        {{#each articles}}
+        <div class="card mb-3">
+            <div class="card-body" data-id="{{_id}}">
+                <div class="row">
+                    <div class="col-md-9">
+                        <a href="{{link}}">{{title}}</a>
+                    </div>
+                    <div class="col-md-3 text-right">
+                        {{#if saved}}
+                        <button class="btn btn-danger save-article">Saved!</button>
+                        {{else}}
+                        <button class="btn btn-primary save-article">Save Article</button>
+                        {{/if}}
+                        <button class="btn btn-primary view-comment ml-1">Add or View Note</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-sm-0">
+                        <p>{{excerpt}}</p>
+                    </div>
+                    <div class="col-md-4 col-sm-0"></div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </div>
 

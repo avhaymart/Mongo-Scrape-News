@@ -3,30 +3,81 @@ var db = require("../models");
 
 module.exports = function (app, request, cheerio) {
 
-  app.get("/api/articles/:modifier", function (req, res) {
-    if (req.params.modifier === "all") {
-      // Grab every document in the Articles collection
-      db.Article.find({})
-        .then(function (dbArticle) {
-          // If we were able to successfully find Articles, send them back to the client
-          res.json(dbArticle);
-        })
-        .catch(function (err) {
-          // If an error occurred, send it to the client
-          res.json(err);
-        });
-    } else if (req.params.modifier === "saved") {
-      // Grab every document in the Articles collection
-      db.Article.find({saved:true})
-        .then(function (dbArticle) {
-          // If we were able to successfully find Articles, send them back to the client
-          res.json(dbArticle);
-        })
-        .catch(function (err) {
-          // If an error occurred, send it to the client
-          res.json(err);
-        });
-    }
+  // app.get("/api/articles/:modifier", function (req, res) {
+  //   if (req.params.modifier === "all") {
+  //     // Grab every document in the Articles collection
+  //     db.Article.find({})
+  //       .then(function (dbArticle) {
+  //         // If we were able to successfully find Articles, send them back to the client
+  //         res.json(dbArticle);
+  //       })
+  //       .catch(function (err) {
+  //         // If an error occurred, send it to the client
+  //         res.json(err);
+  //       });
+  //   } else if (req.params.modifier === "saved") {
+  //     // Grab every document in the Articles collection
+  //     db.Article.find({
+  //         saved: true
+  //       })
+  //       .then(function (dbArticle) {
+  //         // If we were able to successfully find Articles, send them back to the client
+  //         res.json(dbArticle);
+  //       })
+  //       .catch(function (err) {
+  //         // If an error occurred, send it to the client
+  //         res.json(err);
+  //       });
+  //   }
+  // });
+
+  app.get("/api/notes/:id", function (req, res) {
+    var id = req.params.id;
+    db.Note.findOne({id:id})
+      .then(function (dbNote) {
+        // If we were able to successfully find Articles, send them back to the client
+        console.log(dbNote);
+        res.json(dbNote);
+      })
+      .catch(function (err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
+  });
+
+  app.post("/api/notes/", function (req, res) {
+    db.Note.deleteOne({id:req.body.id}).then(function (err, delOK) {
+      if (delOK) console.log("Collection deleted");
+    })
+    .catch(function(err){
+      console.log("Delete error, " + err);
+    })
+
+    var result = {};
+    result.title = req.body.title;
+    result.body = req.body.body;
+    result.id = req.body.id;
+
+    db.Note.create(result)
+      .then(function (dbNote) {
+        console.log("created, " + dbNote);
+        res.send(true);
+      })
+      .catch(function (err) {
+        // If an error occurred, send it to the client
+        res.send(false);
+        return (err);
+      });
+  });
+
+  app.delete("/api/notes/", function (req, res) {
+    db.Note.deleteOne({id:req.body.id}).then(function (err, delOK) {
+      if (delOK) console.log("Note deleted");
+      res.send("deleted");
+    })
+    .catch(function(err){
+      console.log("Delete error, " + err);
+    })
   });
 
   app.put("/api/articles/:id", function (req, res) {

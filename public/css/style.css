@@ -11,11 +11,17 @@
     align-items: center;
 }
 
-.card-body div {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+.header {
+    clear:both;
+    height: 40px;
+}
+
+.header a {
+    float:left;
+}
+
+.buttonDiv {
+    float:right;
 }
 
 .card-body div a {
@@ -27,6 +33,6 @@
     border-radius: 0;
 }
 
-.card-body p {
+/* .card-body p {
     max-width: 70%;
-}
+} */
