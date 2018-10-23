@@ -17,5 +17,7 @@
   * Cheerio
 * Running the Code
   * Clone this GitHub repository into a directory of your choice.
-  * At the root of the directory, run 'npm i' or 'npm install'.
-  * Run 'npm start'.
+  ```git clone https://github.com/avhaymart/Mongo-Scrape-News.git```
+  * At the root of the directory, run```npm install```.
+  * Ensure MongoDB is running. ```mongo```
+  * Run ```npm start```.
