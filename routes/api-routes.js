@@ -114,7 +114,7 @@ module.exports = function (app, request, cheerio) {
   });
 
   app.get("/api/scrapeArticles", function (req, res) {
-    db.Article.remove(function (err, delOK) {
+    db.Article.deleteMany(function (err, delOK) {
       if (err) throw err;
       if (delOK) console.log("Collection deleted");
     });
@@ -122,10 +122,13 @@ module.exports = function (app, request, cheerio) {
       var $ = cheerio.load(body);
       $("article").each(function (i, element) {
         var result = {};
-        result.title = ($(this).children("header").children("h1").text());
-        result.link = ($(this).children("header").children("h1").children("a").attr("href"));
-        result.excerpt = ($(this).children(".item__content").children(".excerpt").children("p").text());
+        // result.title = ($('body').children(".item__content").children("item__text").children(".headline").children("div").text());
+        result.title= $(this).find(".item__text").children(".headline").children("a").children("div").text()
+        result.link = ($(this).find("h1").children("a").attr("href"));
+        result.excerpt = ($(this).find(".item__text").children(".excerpt").children("p").text());
         result.saved = false;
+
+        console.log(result)
 
         db.Article.create(result)
           .then(function (dbArticle) {
